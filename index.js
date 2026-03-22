@@ -1,29 +1,33 @@
 import fs from "fs";
 import OpenAI from "openai";
 import { htmlToText } from "html-to-text";
-import {germanTextToFileName, insertRuTranslationMarker} from "./lib/de-file-name.js";
-import {expandDeAbbreviations} from "./lib/de-abbreviations.js";
+import {
+  germanTextToFileName,
+  insertRuTranslationMarker,
+} from "./lib/de-file-name.js";
+import { expandDeAbbreviations } from "./lib/de-abbreviations.js";
 
-const cleanHtml = (text) => htmlToText(text, {
-  wordwrap: false,
-  selectors: [
-    {
-      selector: "hr",
-      format: "inline",
-      options: {
-        prefix: " ... ",
-        suffix: " "
-      }
-    },
-    {
-      selector: "br",
-      options: {
-        leadingLineBreaks: 1,
-        trailingLineBreaks: 1
-      }
-    },
-  ]
-}).trim();
+const cleanHtml = (text) =>
+  htmlToText(text, {
+    wordwrap: false,
+    selectors: [
+      {
+        selector: "hr",
+        format: "inline",
+        options: {
+          prefix: " ... ",
+          suffix: " ",
+        },
+      },
+      {
+        selector: "br",
+        options: {
+          leadingLineBreaks: 1,
+          trailingLineBreaks: 1,
+        },
+      },
+    ],
+  }).trim();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const rows = fs.readFileSync("test.tsv", "utf-8").split("\n");
 const outputDir = "audio";
@@ -42,10 +46,13 @@ for (const [index, row] of rows.entries()) {
 
   if (!col1 || !col2) {
     skippedCount += 1;
-    console.log(`[row ${rowNumber}/${rows.length}] skipped: missing column data`, {
-      rawCol1,
-      rawCol2,
-    });
+    console.log(
+      `[row ${rowNumber}/${rows.length}] skipped: missing column data`,
+      {
+        rawCol1,
+        rawCol2,
+      }
+    );
     continue;
   }
 
@@ -54,7 +61,7 @@ for (const [index, row] of rows.entries()) {
 
   console.log(`[row ${rowNumber}/${rows.length}] processing`, {
     file: filename,
-    "text": text,
+    text: text,
   });
 
   try {
