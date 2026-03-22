@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { htmlToText } from "html-to-text";
 import {
   germanTextToFileName,
-  insertRuTranslationMarker,
+  insertTranslationMarker,
 } from "./lib/de-file-name.js";
 import { expandDeAbbreviations } from "./lib/de-abbreviations.js";
 
@@ -31,6 +31,8 @@ const cleanHtml = (text) =>
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const rows = fs.readFileSync("test.tsv", "utf-8").split("\n");
 const outputDir = "audio";
+const translationPattern = /[А-Яа-яЁё]/;
+const translationPrefix = "По-русски";
 
 fs.mkdirSync(outputDir, { recursive: true });
 
@@ -56,7 +58,11 @@ for (const [index, row] of rows.entries()) {
     continue;
   }
 
-  const text = `${col1}. — ${insertRuTranslationMarker(col2)}.`;
+  const text = `${col1}. — ${insertTranslationMarker(
+    col2,
+    translationPattern,
+    translationPrefix
+  )}.`;
   const filename = `${outputDir}/${germanTextToFileName(col1)}.mp3`;
 
   console.log(`[row ${rowNumber}/${rows.length}] processing`, {
