@@ -143,4 +143,6 @@ vite.config.ts.timestamp-*
 
 # Input/output files
 audio/
+input/
+output/
 test.tsv
