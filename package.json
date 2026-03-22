@@ -1,0 +1,16 @@
+{
+  "name": "words-from-tsv-to-audio",
+  "version": "1.0.0",
+  "description": "Convert tsv file with words from Anki to separate mp3 files",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "html-to-text": "^9.0.5",
+    "openai": "^6.32.0"
+  }
+}
