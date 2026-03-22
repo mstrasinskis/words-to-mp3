@@ -19,7 +19,11 @@ if (!apiKey || !tsvPath) {
 const openai = new OpenAI({ apiKey });
 const rows = fs.readFileSync(tsvPath, "utf-8").split("\n");
 const outputDir = "audio";
-const startIndex = Number.parseInt(process.env.START_INDEX ?? "0", 10) || 0;
+const startIndexValue = process.env.START_INDEX;
+const startIndex =
+  startIndexValue === undefined || startIndexValue.trim() === ""
+    ? null
+    : Number.parseInt(startIndexValue, 10);
 const translationPattern = /[А-Яа-яЁё]/;
 const translationPrefix = "По-русски";
 
@@ -31,7 +35,10 @@ let failedCount = 0;
 
 for (const [index, row] of rows.entries()) {
   const rowNumber = index + 1;
-  const filenameIndex = String(startIndex + index).padStart(3, "0");
+  const filenamePrefix =
+    Number.isNaN(startIndex) || startIndex === null
+      ? ""
+      : `${String(startIndex + index).padStart(3, "0")} `;
   const [rawCol1, rawCol2] = row.split("\t");
   const col1 = expandDeAbbreviations(cleanHtml(rawCol1 || ""));
   const col2 = expandDeAbbreviations(cleanHtml(rawCol2 || ""));
@@ -53,7 +60,7 @@ for (const [index, row] of rows.entries()) {
     translationPattern,
     translationPrefix
   )}.`;
-  const filename = `${outputDir}/${filenameIndex}. ${germanTextToFileName(
+  const filename = `${outputDir}/${filenamePrefix}${germanTextToFileName(
     col1
   )}.mp3`;
 
