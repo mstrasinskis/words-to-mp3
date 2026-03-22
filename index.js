@@ -7,6 +7,7 @@ import { cleanHtml, insertTranslationMarker } from "./lib/tts-utils.js";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const rows = fs.readFileSync("test.tsv", "utf-8").split("\n");
 const outputDir = "audio";
+const startIndex = Number.parseInt(process.env.START_INDEX ?? "0", 10) || 0;
 const translationPattern = /[А-Яа-яЁё]/;
 const translationPrefix = "По-русски";
 
@@ -18,6 +19,7 @@ let failedCount = 0;
 
 for (const [index, row] of rows.entries()) {
   const rowNumber = index + 1;
+  const filenameIndex = String(startIndex + index).padStart(3, "0");
   const [rawCol1, rawCol2] = row.split("\t");
   const col1 = expandDeAbbreviations(cleanHtml(rawCol1 || ""));
   const col2 = expandDeAbbreviations(cleanHtml(rawCol2 || ""));
@@ -39,7 +41,9 @@ for (const [index, row] of rows.entries()) {
     translationPattern,
     translationPrefix
   )}.`;
-  const filename = `${outputDir}/${germanTextToFileName(col1)}.mp3`;
+  const filename = `${outputDir}/${filenameIndex}. ${germanTextToFileName(
+    col1
+  )}.mp3`;
 
   console.log(`[row ${rowNumber}/${rows.length}] processing`, {
     file: filename,
