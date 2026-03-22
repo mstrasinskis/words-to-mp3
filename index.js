@@ -1,31 +1,9 @@
 import fs from "fs";
 import OpenAI from "openai";
-import { htmlToText } from "html-to-text";
 import { germanTextToFileName } from "./lib/de-file-name.js";
 import { expandDeAbbreviations } from "./lib/de-abbreviations.js";
-import { insertTranslationMarker } from "./lib/tts-utils.js";
+import { cleanHtml, insertTranslationMarker } from "./lib/tts-utils.js";
 
-const cleanHtml = (text) =>
-  htmlToText(text, {
-    wordwrap: false,
-    selectors: [
-      {
-        selector: "hr",
-        format: "inline",
-        options: {
-          prefix: " ... ",
-          suffix: " ",
-        },
-      },
-      {
-        selector: "br",
-        options: {
-          leadingLineBreaks: 1,
-          trailingLineBreaks: 1,
-        },
-      },
-    ],
-  }).trim();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const rows = fs.readFileSync("test.tsv", "utf-8").split("\n");
 const outputDir = "audio";
