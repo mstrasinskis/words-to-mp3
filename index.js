@@ -41,7 +41,7 @@ for (const [index, row] of rows.entries()) {
     translationPattern,
     translationPrefix
   )}.`;
-  const filename = `${outputDir}/${filenameIndex}. ${germanTextToFileName(
+  const filename = `${outputDir}/${filenameIndex} ${germanTextToFileName(
     col1
   )}.mp3`;
 
