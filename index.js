@@ -4,8 +4,20 @@ import { germanTextToFileName } from "./lib/de-file-name.js";
 import { expandDeAbbreviations } from "./lib/de-abbreviations.js";
 import { cleanHtml, insertTranslationMarker } from "./lib/tts-utils.js";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const rows = fs.readFileSync("test.tsv", "utf-8").split("\n");
+const apiKey = process.env.OPENAI_API_KEY;
+const tsvPath = process.env.TSV_PATH;
+
+if (!apiKey || !tsvPath) {
+  console.error(
+    "Missing required env vars: OPENAI_API_KEY and TSV_PATH.\n" +
+      "Example:\n" +
+      'OPENAI_API_KEY="your_api_key" TSV_PATH="test.tsv" START_INDEX=1 npm start'
+  );
+  process.exit(1);
+}
+
+const openai = new OpenAI({ apiKey });
+const rows = fs.readFileSync(tsvPath, "utf-8").split("\n");
 const outputDir = "audio";
 const startIndex = Number.parseInt(process.env.START_INDEX ?? "0", 10) || 0;
 const translationPattern = /[А-Яа-яЁё]/;
@@ -41,7 +53,7 @@ for (const [index, row] of rows.entries()) {
     translationPattern,
     translationPrefix
   )}.`;
-  const filename = `${outputDir}/${filenameIndex} ${germanTextToFileName(
+  const filename = `${outputDir}/${filenameIndex}. ${germanTextToFileName(
     col1
   )}.mp3`;
 
