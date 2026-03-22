@@ -18,7 +18,7 @@ if (!apiKey || !tsvPath) {
 
 const openai = new OpenAI({ apiKey });
 const rows = fs.readFileSync(tsvPath, "utf-8").split("\n");
-const outputDir = "audio";
+const outputDir = "output";
 const startIndexValue = process.env.START_INDEX;
 const startIndex =
   startIndexValue === undefined || startIndexValue.trim() === ""
