@@ -1,11 +1,9 @@
 import fs from "fs";
 import OpenAI from "openai";
 import { htmlToText } from "html-to-text";
-import {
-  germanTextToFileName,
-  insertTranslationMarker,
-} from "./lib/de-file-name.js";
+import { germanTextToFileName } from "./lib/de-file-name.js";
 import { expandDeAbbreviations } from "./lib/de-abbreviations.js";
+import { insertTranslationMarker } from "./lib/tts-utils.js";
 
 const cleanHtml = (text) =>
   htmlToText(text, {
