@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import "./lib/env.js";
 import { formatTimestamp } from "./lib/date-utils.js";
 import { wordsToTsv } from "./lib/words-to-tsv.js";
 import { tsvToMp3 } from "./lib/tsv-to-mp3.js";

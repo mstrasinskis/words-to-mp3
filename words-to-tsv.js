@@ -1,4 +1,5 @@
 import { wordsToTsv } from "./lib/words-to-tsv.js";
+import "./lib/env.js";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const inputPath = process.env.INPUT_PATH;

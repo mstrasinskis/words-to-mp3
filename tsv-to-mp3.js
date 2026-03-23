@@ -1,4 +1,5 @@
 import { tsvToMp3 } from "./lib/tsv-to-mp3.js";
+import "./lib/env.js";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const tsvPath = process.env.TSV_PATH;
