@@ -3,6 +3,7 @@ import path from "path";
 import "./lib/env.js";
 import { formatTimestamp } from "./lib/date-utils.js";
 import { wordsToTsv } from "./lib/words-to-tsv.js";
+import { tsvToHtml } from "./lib/tsv-to-html.js";
 import { tsvToMp3 } from "./lib/tsv-to-mp3.js";
 
 const apiKey = process.env.OPENAI_API_KEY;
@@ -21,11 +22,13 @@ if (!apiKey || !inputPath) {
 
 const timestamp = formatTimestamp(new Date());
 const tsvPath = path.join(outputDir, `${timestamp}.tsv`);
+const htmlPath = path.join(outputDir, `${timestamp}.html`);
 
 fs.mkdirSync(outputDir, { recursive: true });
 
 try {
   await wordsToTsv(apiKey, inputPath, tsvPath);
+  tsvToHtml(tsvPath, htmlPath);
   await tsvToMp3(apiKey, tsvPath, startIndexValue);
 } catch (err) {
   console.error("Error:", err);
