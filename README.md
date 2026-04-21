@@ -33,7 +33,7 @@ INPUT_PATH="file_with_words.txt" npm start -- --skip-mp3
 This project takes an input file where each line contains one word, phrase, or grammar topic. It then:
 
 1. sends the list to an OpenAI text model to generate a 2-column TSV (`Front<TAB>Back`)
-2. converts that TSV into a 3-column HTML table (`Original Word | Samples | Translation`)
+2. converts that TSV into a 3-column HTML table (`Original Word | Explanation & Samples | Translation`)
 3. saves the TSV and HTML files into the `output/` directory
 4. optionally converts each TSV row into an MP3 file using OpenAI text-to-speech
 5. optionally appends silence at the end of each MP3
@@ -103,7 +103,7 @@ CLI flags:
 Files are created in the `output/` directory:
 
 - `YYYY-MM-DD_HH-MM-SS.tsv`: generated TSV for Anki import
-- `YYYY-MM-DD_HH-MM-SS.html`: generated HTML table with `Original Word`, `Samples`, and `Translation` columns
+- `YYYY-MM-DD_HH-MM-SS.html`: generated HTML table with `Original Word`, `Explanation & Samples`, and `Translation` columns
 - optionally, `die Bewerbung.mp3`, `überzeugen.mp3`, etc.
 
 ## TSV Structure
@@ -123,7 +123,7 @@ The MP3 generation step converts the TSV HTML into plain speech-friendly text be
 The generated HTML file contains one table with three plain-text columns:
 
 - `Original Word`: the normalized front-side term
-- `Samples`: examples and any extra context from the TSV back side
-- `Translation`: the translation block from the TSV back side
+- `Explanation & Samples`: the explanation block when present, plus the sample block(s)
+- `Translation`: the last block from the TSV back side
 
 The table cells contain text only. Any TSV HTML fragments such as `<hr>` and `<br>` are converted into plain text before being written into the HTML table.
