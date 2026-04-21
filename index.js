@@ -6,9 +6,15 @@ import { wordsToTsv } from "./lib/words-to-tsv.js";
 import { tsvToHtml } from "./lib/tsv-to-html.js";
 import { tsvToMp3 } from "./lib/tsv-to-mp3.js";
 
+const parseBooleanEnv = (value) =>
+  ["1", "true", "yes", "on"].includes((value || "").trim().toLowerCase());
+const hasCliFlag = (flag) => process.argv.includes(flag);
+
 const apiKey = process.env.OPENAI_API_KEY;
 const inputPath = process.env.INPUT_PATH;
 const startIndexValue = process.env.START_INDEX;
+const skipMp3 =
+  hasCliFlag("--skip-mp3") || parseBooleanEnv(process.env.SKIP_MP3);
 const outputDir = "output";
 
 if (!apiKey || !inputPath) {
@@ -29,7 +35,14 @@ fs.mkdirSync(outputDir, { recursive: true });
 try {
   await wordsToTsv(apiKey, inputPath, tsvPath);
   tsvToHtml(tsvPath, htmlPath);
-  await tsvToMp3(apiKey, tsvPath, startIndexValue);
+
+  if (skipMp3) {
+    console.log(
+      "Skipping MP3 generation because --skip-mp3 or SKIP_MP3 is enabled."
+    );
+  } else {
+    await tsvToMp3(apiKey, tsvPath, startIndexValue);
+  }
 } catch (err) {
   console.error("Error:", err);
   process.exitCode = 1;

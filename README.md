@@ -3,8 +3,8 @@
 Generate study materials from a plain text word list (each line contains one word):
 
 - a timestamped `.tsv` file ready to import into Anki app
-- a timestamped `.html` table with plain-text cells
-- one `.mp3` file per TSV row (word) for listening practice (includes meta data)
+- a timestamped `.html` table with plain-text cells (for printing)
+- optionally, one `.mp3` file per TSV row (word) for listening practice (includes meta data)
 
 The entry point is `index.js`.
 
@@ -22,6 +22,12 @@ npm install
 INPUT_PATH="file_with_words.txt" npm start
 ```
 
+Skip MP3 generation from the CLI:
+
+```bash
+INPUT_PATH="file_with_words.txt" npm start -- --skip-mp3
+```
+
 ## What It Does
 
 This project takes an input file where each line contains one word, phrase, or grammar topic. It then:
@@ -29,9 +35,9 @@ This project takes an input file where each line contains one word, phrase, or g
 1. sends the list to an OpenAI text model to generate a 2-column TSV (`Front<TAB>Back`)
 2. converts that TSV into a 3-column HTML table (`Original Word | Samples | Translation`)
 3. saves the TSV and HTML files into the `output/` directory
-4. converts each TSV row into an MP3 file using OpenAI text-to-speech
-5. appends silence at the end of each MP3
-6. writes MP3 metadata such as title, track number, album, and voice/model info
+4. optionally converts each TSV row into an MP3 file using OpenAI text-to-speech
+5. optionally appends silence at the end of each MP3
+6. optionally writes MP3 metadata such as title, track number, album, and voice/model info
 
 The TSV is designed for Anki import. The MP3 files are meant for learning vocabulary by listening.
 
@@ -57,6 +63,7 @@ OPENAI_API_KEY=your_api_key_here
 
 INPUT_PATH=_words.txt
 START_INDEX=1
+SKIP_MP3=true
 
 LANG_FROM=de
 LANG_TO=en, ru
@@ -85,6 +92,11 @@ TTS_AFTER_SILENCE_SECONDS=1.75
 - `LANG_BEFORE_TRANSLATION`: optional label prefix for the translation block; for multiple targets you can provide a comma-separated list aligned with `LANG_TO`, for example `English, Russian`
 - `TTS_AFTER_SILENCE_SECONDS=1.75`
 - `START_INDEX`: if set, MP3 filenames get a zero-padded numeric prefix such as `001`, `002`, `003`
+- `SKIP_MP3`: if set to `true`, `1`, `yes`, or `on`, the app skips MP3 generation and only writes the TSV and HTML outputs
+
+CLI flags:
+
+- `--skip-mp3`: skips MP3 generation and only writes the TSV and HTML outputs
 
 ## Output
 
@@ -92,7 +104,7 @@ Files are created in the `output/` directory:
 
 - `YYYY-MM-DD_HH-MM-SS.tsv`: generated TSV for Anki import
 - `YYYY-MM-DD_HH-MM-SS.html`: generated HTML table with `Original Word`, `Samples`, and `Translation` columns
-- `die Bewerbung.mp3`, `überzeugen.mp3`, etc.
+- optionally, `die Bewerbung.mp3`, `überzeugen.mp3`, etc.
 
 ## TSV Structure
 
