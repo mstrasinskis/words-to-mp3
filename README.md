@@ -17,7 +17,6 @@ npm install
 
 ## Run
 
-
 ```bash
 INPUT_PATH="file_with_words.txt" npm start
 ```
@@ -58,9 +57,9 @@ INPUT_PATH=_words.txt
 START_INDEX=1
 
 LANG_FROM=de
-LANG_TO=en
+LANG_TO=en, ru
 LANG_CONTEXT=Erfolgreich in Beruf, Business, B2 Niveau
-LANG_BEFORE_TRANSLATION=English
+LANG_BEFORE_TRANSLATION=English, Russian
 
 TEXT_MODEL=gpt-4.1-mini
 TTS_MODEL=gpt-4o-mini-tts
@@ -74,14 +73,14 @@ TTS_AFTER_SILENCE_SECONDS=1.75
 - `INPUT_PATH`: path to the source word list file
 
 - `LANG_FROM`: source language, for example `de`
-- `LANG_TO`: target language, for example `en`
+- `LANG_TO`: one or more target languages as a comma-separated list, for example `en` or `en, ru`
 - `LANG_CONTEXT`: study context used to shape translations and examples
 
 - `TTS_VOICE`: TTS voice, for example `marin`
   - For available TTS voices, see the OpenAI docs:
-[Text-to-speech voice options](https://developers.openai.com/api/docs/guides/text-to-speech#voice-options)
+    [Text-to-speech voice options](https://developers.openai.com/api/docs/guides/text-to-speech#voice-options)
 - `TTS_AFTER_SILENCE_SECONDS`: number of seconds of silence appended to each MP3
-- `LANG_BEFORE_TRANSLATION`: helps the generated audio clearly distinguish the translation language, for example `English: `
+- `LANG_BEFORE_TRANSLATION`: optional label prefix for the translation block; for multiple targets you can provide a comma-separated list aligned with `LANG_TO`, for example `English, Russian`
 - `TTS_AFTER_SILENCE_SECONDS=1.75`
 - `START_INDEX`: if set, MP3 filenames get a zero-padded numeric prefix such as `001`, `002`, `003`
 
@@ -98,7 +97,7 @@ Each TSV row contains:
 
 - `Front`: the normalized vocabulary item or topic
 - `Back`: HTML content that may include
-  - the translation
+  - one or more translations
   - a short explanation when needed
   - one or more short examples
 
