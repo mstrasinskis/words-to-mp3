@@ -46,13 +46,16 @@ The TSV is designed for Anki import. The MP3 files are meant for learning vocabu
 Prepare a text file with one item per line, for example:
 
 ```txt
+# Job interview
 die Bewerbung
 überzeugen
+# Work qualities
 zuverlässig
 Plusquamperfekt
 ```
 
 Set `INPUT_PATH` to that file.
+Lines starting with `#` are treated as comments. They are ignored for TSV and MP3 generation, but preserved in the HTML file as single-row comment separators in the same positions.
 
 ## Setup
 
@@ -126,4 +129,4 @@ The generated HTML file contains one table with three plain-text columns:
 - `Samples`: examples and any extra context from the TSV back side
 - `Translation`: the translation block from the TSV back side
 
-The table cells contain text only. Any TSV HTML fragments such as `<hr>` and `<br>` are converted into plain text before being written into the HTML table.
+If the input file contains lines starting with `#`, those comments are inserted into the HTML table as separate rows with a single cell spanning all three columns. Any TSV HTML fragments such as `<hr>` and `<br>` are converted into plain text before being written into the HTML table.

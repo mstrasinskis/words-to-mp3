@@ -34,7 +34,7 @@ fs.mkdirSync(outputDir, { recursive: true });
 
 try {
   await wordsToTsv(apiKey, inputPath, tsvPath);
-  tsvToHtml(tsvPath, htmlPath);
+  tsvToHtml(tsvPath, htmlPath, inputPath);
 
   if (skipMp3) {
     console.log(
